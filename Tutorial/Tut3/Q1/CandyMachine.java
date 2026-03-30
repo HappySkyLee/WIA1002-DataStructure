@@ -105,6 +105,7 @@ public class CandyMachine {
 			int money = scanner.nextInt();
 			sellProduct(selected, money);
 		}
+		scanner.close();
 	}
 
 	public static void main(String[] args) {
