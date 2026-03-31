@@ -1,4 +1,4 @@
-package Lab.Lab3.Q1;
+package Lab.Lab3;
 
 public class ArrayBag<T> implements BagInterface<T> {
     
@@ -129,5 +129,65 @@ public class ArrayBag<T> implements BagInterface<T> {
             index++;
         }
         return where;
+    }
+
+    //Q2
+    @Override
+    public BagInterface<T> union(BagInterface<T> anotherBag) {
+        BagInterface<T> result = new ArrayBag<>(this.getCurrentSize() + anotherBag.getCurrentSize());
+        
+        // Add all entries from this bag to the result
+        T[] thisBagArray = this.toArray();
+        for (int i = 0; i < thisBagArray.length; i++) {
+            result.add(thisBagArray[i]);
+        }
+        
+        // Add all entries from anotherBag to the result
+        T[] anotherBagArray = anotherBag.toArray();
+        for (int i = 0; i < anotherBagArray.length; i++) {
+            result.add(anotherBagArray[i]);
+        }
+        
+        return result;
+    }
+
+    //Q3
+    @Override
+    public BagInterface<T> intersection(BagInterface<T> anotherBag) {
+        BagInterface<T> result = new ArrayBag<>(Math.min(this.getCurrentSize(), anotherBag.getCurrentSize()));
+        BagInterface<T> tempBag = new ArrayBag<>(anotherBag.getCurrentSize());
+
+        // Copy entries so each match can be consumed only once.
+        T[] anotherBagArray = anotherBag.toArray();
+        for (int i = 0; i < anotherBagArray.length; i++) {
+            tempBag.add(anotherBagArray[i]);
+        }
+        
+        T[] thisBagArray = this.toArray();
+        for (int i = 0; i < thisBagArray.length; i++) {
+            T currentEntry = thisBagArray[i];
+            if (tempBag.remove(currentEntry)) {
+                result.add(currentEntry);
+            }
+        }
+        return result;
+    }
+    //Q4
+    @Override
+    public BagInterface<T> difference(BagInterface<T> anotherBag) {
+        BagInterface<T> result = new ArrayBag<>(this.getCurrentSize());
+        
+        T[] thisBagArray = this.toArray();
+        for (int i = 0; i < thisBagArray.length; i++) {
+            result.add(thisBagArray[i]);
+        }
+        T[] anotherBagArray = anotherBag.toArray();
+        for (int i = 0; i < anotherBagArray.length; i++) {
+            T currentEntry = anotherBagArray[i];
+            if (this.contains(currentEntry)) {
+                result.remove(currentEntry);
+            }
+        }
+        return result;
     }
 }
